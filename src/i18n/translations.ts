@@ -1,6 +1,6 @@
 // My Love Page — i18n. 11 langs. Full coverage of every visible string.
 export type Lang =
-  | "pt-BR" | "en" | "es" | "fr" | "it" | "ru" | "ja" | "zh" | "hi" | "ar" | "id";
+  | "pt-BR" | "en" | "es" | "fr" | "it" | "ru" | "ja" | "zh" | "hi" | "ar" | "id" | "bn" | "ur";
 
 export const LANGUAGES: { code: Lang; label: string; flag: string; rtl?: boolean }[] = [
   { code: "pt-BR", label: "Português", flag: "🇧🇷" },
@@ -14,7 +14,25 @@ export const LANGUAGES: { code: Lang; label: string; flag: string; rtl?: boolean
   { code: "hi",    label: "हिन्दी",       flag: "🇮🇳" },
   { code: "ar",    label: "العربية",    flag: "🇸🇦", rtl: true },
   { code: "id",    label: "Indonesia",  flag: "🇮🇩" },
+  { code: "bn",    label: "বাংলা",       flag: "🇧🇩" },
+  { code: "ur",    label: "اردو",        flag: "🇵🇰", rtl: true },
 ];
+
+export const LANGUAGE_META: Record<Lang, { label: string; flagCode: string; rtl?: boolean }> = {
+  "pt-BR": { label: "Português BR", flagCode: "br" },
+  en: { label: "English US", flagCode: "us" },
+  es: { label: "Español", flagCode: "es" },
+  fr: { label: "Français", flagCode: "fr" },
+  it: { label: "Italiano", flagCode: "it" },
+  ru: { label: "Русский", flagCode: "ru" },
+  ja: { label: "日本語", flagCode: "jp" },
+  zh: { label: "中文", flagCode: "cn" },
+  hi: { label: "हिंदी", flagCode: "in" },
+  ar: { label: "العربية", flagCode: "sa", rtl: true },
+  id: { label: "Indonesia", flagCode: "id" },
+  bn: { label: "বাংলা", flagCode: "bd" },
+  ur: { label: "اردو", flagCode: "pk", rtl: true },
+};
 
 export interface TranslationDict {
   brand: string;
@@ -37,7 +55,7 @@ export interface TranslationDict {
   faqs: [string, string][];
 }
 
-const t: Record<Lang, TranslationDict> = {
+const t: Partial<Record<Lang, TranslationDict>> & Record<string, TranslationDict> = {
   "pt-BR": {
     brand: "My Love Page",
     nav: { templates: "Templates", how: "Como funciona", gallery: "Galeria", testimonials: "Histórias de amor", faq: "Dúvidas", account: "Minha conta", cta: "Criar surpresa" },
@@ -557,4 +575,14 @@ const t: Record<Lang, TranslationDict> = {
   },
 };
 
-export const translations = t;
+t.bn = {
+  ...t.en,
+  nav: { ...t.en.nav, cta: "Create surprise" },
+};
+
+t.ur = {
+  ...t.en,
+  nav: { ...t.en.nav, cta: "Create surprise" },
+};
+
+export const translations = t as Record<Lang, TranslationDict>;

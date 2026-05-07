@@ -129,7 +129,7 @@ export const useLovePages = () => {
         theme: data.themeId,
         plan_type: plan,
         is_published: publish,
-        music_url: data.music || null,
+        music_url: plan === "premium" ? data.music || null : null,
       };
 
       let row: LovePageRow;

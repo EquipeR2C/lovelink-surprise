@@ -3,41 +3,44 @@ import { Lang, LANGUAGES, translations, TranslationDict } from "./translations";
 
 interface Currency {
   code: string;
-  symbol: string;
-  rate: number; // multiplier from base USD
-  format: (n: number) => string;
+  locale: string;
 }
 
-const CURRENCIES: Record<string, Omit<Currency, "format">> = {
-  BRL: { code: "BRL", symbol: "R$", rate: 1 }, // BRL is special, uses BR prices directly
-  USD: { code: "USD", symbol: "US$", rate: 1 },
-  EUR: { code: "EUR", symbol: "€", rate: 0.92 },
-  GBP: { code: "GBP", symbol: "£", rate: 0.79 },
-  JPY: { code: "JPY", symbol: "¥", rate: 155 },
-  CNY: { code: "CNY", symbol: "¥", rate: 7.2 },
-  INR: { code: "INR", symbol: "₹", rate: 84 },
-  RUB: { code: "RUB", symbol: "₽", rate: 92 },
-  IDR: { code: "IDR", symbol: "Rp", rate: 16000 },
+interface MarketPrice {
+  currency: keyof typeof CURRENCIES;
+  basic: number;
+  premium: number;
+}
+
+const CURRENCIES = {
+  BRL: { code: "BRL", locale: "pt-BR" },
+  USD: { code: "USD", locale: "en-US" },
+  EUR: { code: "EUR", locale: "es-ES" },
+  GBP: { code: "GBP", locale: "en-GB" },
+  JPY: { code: "JPY", locale: "ja-JP" },
+  CNY: { code: "CNY", locale: "zh-CN" },
+  INR: { code: "INR", locale: "hi-IN" },
+  RUB: { code: "RUB", locale: "ru-RU" },
+  IDR: { code: "IDR", locale: "id-ID" },
+  SAR: { code: "SAR", locale: "ar-SA" },
+  BDT: { code: "BDT", locale: "bn-BD" },
+  PKR: { code: "PKR", locale: "ur-PK" },
+} satisfies Record<string, Currency>;
+
+const MARKET_PRICES: Record<string, MarketPrice> = {
+  BR: { currency: "BRL", basic: 9.9, premium: 34.9 },
+  US: { currency: "USD", basic: 1.99, premium: 6.99 },
+  GB: { currency: "GBP", basic: 1.59, premium: 5.59 },
+  EU: { currency: "EUR", basic: 1.79, premium: 5.99 },
+  JP: { currency: "JPY", basic: 320, premium: 1100 },
+  CN: { currency: "CNY", basic: 13.9, premium: 47.9 },
+  IN: { currency: "INR", basic: 179, premium: 649 },
+  RU: { currency: "RUB", basic: 149, premium: 529 },
+  ID: { currency: "IDR", basic: 32000, premium: 113000 },
+  SA: { currency: "SAR", basic: 7.49, premium: 26.99 },
+  BD: { currency: "BDT", basic: 239, premium: 849 },
+  PK: { currency: "PKR", basic: 559, premium: 1999 },
 };
-
-// USD base prices
-const PRICES_USD = { basic: 1.99, premium: 6.99 };
-// BRL local prices
-const PRICES_BRL = { basic: 9.9, premium: 34.9 };
-
-function detectCountry(): string {
-  // Use timezone heuristic for default country code
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-  if (/America\/Sao_Paulo|America\/Fortaleza|America\/Recife|America\/Bahia|America\/Manaus|America\/Belem/i.test(tz)) return "BR";
-  if (/Europe\/London/i.test(tz)) return "GB";
-  if (/Europe\//i.test(tz)) return "EU";
-  if (/Asia\/Tokyo/i.test(tz)) return "JP";
-  if (/Asia\/Shanghai|Asia\/Hong_Kong/i.test(tz)) return "CN";
-  if (/Asia\/Kolkata|Asia\/Calcutta/i.test(tz)) return "IN";
-  if (/Europe\/Moscow|Asia\/Novosibirsk/i.test(tz)) return "RU";
-  if (/Asia\/Jakarta|Asia\/Makassar/i.test(tz)) return "ID";
-  return "US";
-}
 
 function detectLang(): Lang {
   const saved = localStorage.getItem("mlp_lang") as Lang | null;
@@ -52,15 +55,30 @@ function detectLang(): Lang {
   if (nav.startsWith("zh")) return "zh";
   if (nav.startsWith("hi")) return "hi";
   if (nav.startsWith("ar")) return "ar";
+  if (nav.startsWith("bn")) return "bn";
   if (nav.startsWith("id")) return "id";
+  if (nav.startsWith("ur")) return "ur";
   return "en";
 }
 
-function currencyFor(country: string): string {
-  return ({
-    BR: "BRL", US: "USD", GB: "GBP", EU: "EUR",
-    JP: "JPY", CN: "CNY", IN: "INR", RU: "RUB", ID: "IDR",
-  } as Record<string, string>)[country] || "USD";
+function marketForLang(lang: Lang): MarketPrice {
+  const marketByLang: Record<Lang, keyof typeof MARKET_PRICES> = {
+    "pt-BR": "BR",
+    en: "US",
+    es: "EU",
+    fr: "EU",
+    it: "EU",
+    ru: "RU",
+    ja: "JP",
+    zh: "CN",
+    hi: "IN",
+    ar: "SA",
+    id: "ID",
+    bn: "BD",
+    ur: "PK",
+  };
+
+  return MARKET_PRICES[marketByLang[lang]];
 }
 
 interface I18nValue {
@@ -78,9 +96,7 @@ const Ctx = createContext<I18nValue | null>(null);
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLangState] = useState<Lang>(() => detectLang());
   const [currency, setCurrencyState] = useState<string>(() => {
-    const saved = localStorage.getItem("mlp_currency");
-    if (saved && CURRENCIES[saved]) return saved;
-    return currencyFor(detectCountry());
+    return marketForLang(detectLang()).currency;
   });
 
   useEffect(() => {
@@ -88,6 +104,7 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
     const isRtl = !!LANGUAGES.find((l) => l.code === lang)?.rtl;
     document.documentElement.lang = lang;
     document.documentElement.dir = isRtl ? "rtl" : "ltr";
+    setCurrencyState(marketForLang(lang).currency);
   }, [lang]);
 
   useEffect(() => {
@@ -95,30 +112,22 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   }, [currency]);
 
   const value = useMemo<I18nValue>(() => {
-    const cur = CURRENCIES[currency] || CURRENCIES.USD;
+    const selectedMarket =
+      Object.values(MARKET_PRICES).find((market) => market.currency === currency) ||
+      marketForLang(lang);
+    const cur = CURRENCIES[selectedMarket.currency] || CURRENCIES.USD;
     const fmt = (n: number) => {
       try {
-        return new Intl.NumberFormat(lang, {
+        return new Intl.NumberFormat(cur.locale, {
           style: "currency",
           currency: cur.code,
-          maximumFractionDigits: cur.code === "JPY" || cur.code === "IDR" ? 0 : 2,
+          maximumFractionDigits: ["JPY", "IDR", "PKR"].includes(cur.code) ? 0 : 2,
         }).format(n);
       } catch {
-        return `${cur.symbol} ${n.toFixed(2)}`;
+        return `${cur.code} ${n.toFixed(2)}`;
       }
     };
-    let basic: number, premium: number;
-    if (cur.code === "BRL") {
-      basic = PRICES_BRL.basic;
-      premium = PRICES_BRL.premium;
-    } else {
-      basic = PRICES_USD.basic * cur.rate;
-      premium = PRICES_USD.premium * cur.rate;
-      if (cur.code === "JPY" || cur.code === "IDR") {
-        basic = Math.round(basic);
-        premium = Math.round(premium);
-      }
-    }
+
     const rtl = !!LANGUAGES.find((l) => l.code === lang)?.rtl;
     return {
       lang,
@@ -127,7 +136,7 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
       rtl,
       currency,
       setCurrency: setCurrencyState,
-      prices: { basic: fmt(basic), premium: fmt(premium) },
+      prices: { basic: fmt(selectedMarket.basic), premium: fmt(selectedMarket.premium) },
     };
   }, [lang, currency]);
 

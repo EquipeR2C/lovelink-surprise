@@ -179,6 +179,182 @@
 /* Soft glow ring for premium CTAs */
 .glow-rose { box-shadow: 0 0 0 1px hsl(348 78% 56% / 0.25), 0 20px 60px -20px hsl(348 78% 56% / 0.55); }
 
+.hero-device-scene {
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-main-phone {
+  width: min(100%, 340px);
+  z-index: 3;
+}
+
+.hero-phone-shell,
+.hero-side-phone {
+  position: relative;
+  border-radius: 2.6rem;
+  background: linear-gradient(180deg, hsl(250 12% 16%), hsl(250 12% 10%));
+  box-shadow: 0 24px 80px -28px hsl(340 40% 12% / 0.55);
+}
+
+.hero-phone-shell {
+  padding: 0.55rem;
+}
+
+.hero-phone-status {
+  position: absolute;
+  top: 0.65rem;
+  left: 1.1rem;
+  right: 1.1rem;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: hsl(0 0% 100% / 0.9);
+}
+
+.hero-phone-notch {
+  position: absolute;
+  top: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, hsl(0 0% 7%), hsl(0 0% 12%));
+  z-index: 4;
+}
+
+.hero-phone-notch-main {
+  width: 7.5rem;
+}
+
+.hero-phone-content {
+  overflow: hidden;
+  border-radius: 2.1rem;
+  background: hsl(0 0% 100%);
+}
+
+.hero-phone-content > div {
+  min-height: 610px;
+}
+
+.hero-side-phone {
+  position: absolute;
+  top: 5.5rem;
+  width: 210px;
+  height: 430px;
+  padding: 0.55rem;
+  z-index: 1;
+}
+
+.hero-side-phone-left {
+  left: -0.5rem;
+  transform: rotate(-13deg);
+}
+
+.hero-side-phone-right {
+  right: -0.5rem;
+  transform: rotate(13deg);
+}
+
+.hero-side-phone-screen {
+  height: 100%;
+  border-radius: 2rem;
+  padding: 4.8rem 1.2rem 1.4rem;
+  overflow: hidden;
+}
+
+.hero-side-phone-screen-dark {
+  background: linear-gradient(180deg, hsl(0 0% 7%), hsl(0 0% 12%));
+}
+
+.hero-side-phone-screen-blue {
+  background: linear-gradient(180deg, hsl(212 52% 42%), hsl(211 55% 35%));
+}
+
+.hero-floating-card {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border-radius: 1.3rem;
+  border: 1px solid hsl(350 30% 88%);
+  background: hsl(0 0% 100% / 0.94);
+  padding: 1rem 1.2rem;
+  box-shadow: 0 18px 40px -22px hsl(340 35% 20% / 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.hero-floating-card-top {
+  top: -0.2rem;
+  right: 2rem;
+}
+
+.hero-floating-icon {
+  display: grid;
+  height: 2.2rem;
+  width: 2.2rem;
+  place-items: center;
+  border-radius: 999px;
+  background: hsl(270 100% 97%);
+  color: hsl(269 78% 64%);
+}
+
+.hero-heart {
+  position: absolute;
+  background: linear-gradient(135deg, hsl(272 92% 78%), hsl(320 82% 74%));
+  opacity: 0.78;
+  filter: drop-shadow(0 16px 24px hsl(280 70% 72% / 0.22));
+  transform: rotate(-8deg);
+}
+
+.hero-heart::before,
+.hero-heart::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.hero-heart::before {
+  top: -50%;
+  left: 0;
+}
+
+.hero-heart::after {
+  top: 0;
+  left: 50%;
+}
+
+.hero-heart-1 {
+  top: 4rem;
+  left: 6rem;
+  width: 74px;
+  height: 74px;
+}
+
+.hero-heart-2 {
+  right: 3.5rem;
+  top: 4.5rem;
+  width: 84px;
+  height: 84px;
+}
+
+.hero-heart-3 {
+  right: 1.5rem;
+  bottom: 4.5rem;
+  width: 58px;
+  height: 58px;
+}
+
 /* Scroll offset so header doesn't hide anchored sections */
 section[id] { scroll-margin-top: 88px; }
 
@@ -186,5 +362,66 @@ section[id] { scroll-margin-top: 88px; }
 @media (prefers-reduced-motion: reduce) {
   .heartbeat, .floating-heart, .marquee-track, .animate-marquee, .animate-fadeInUp { animation: none !important; }
   .reveal { transition: none; opacity: 1; transform: none; }
+}
+
+@media (max-width: 1279px) {
+  .hero-device-scene {
+    min-height: auto;
+    padding-top: 2rem;
+  }
+
+  .hero-side-phone {
+    opacity: 0.82;
+    top: 6rem;
+  }
+
+  .hero-side-phone-left {
+    left: 1.25rem;
+  }
+
+  .hero-side-phone-right {
+    right: 1.25rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-device-scene {
+    min-height: auto;
+    padding-top: 1.5rem;
+  }
+
+  .hero-main-phone {
+    width: min(100%, 310px);
+  }
+
+  .hero-phone-content > div {
+    min-height: 560px;
+  }
+
+  .hero-side-phone,
+  .hero-floating-card {
+    display: none;
+  }
+
+  .hero-heart-1 {
+    left: 0.5rem;
+    top: 2rem;
+    width: 56px;
+    height: 56px;
+  }
+
+  .hero-heart-2 {
+    right: 0.5rem;
+    top: 2.5rem;
+    width: 62px;
+    height: 62px;
+  }
+
+  .hero-heart-3 {
+    right: 0.75rem;
+    bottom: 1.5rem;
+    width: 46px;
+    height: 46px;
+  }
 }
 

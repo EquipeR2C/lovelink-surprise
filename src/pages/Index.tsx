@@ -11,7 +11,7 @@ import { SupportSection } from "@/components/sections/SupportSection";
 import { BenefitsSection } from "@/components/sections/BenefitsSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { useI18n } from "@/i18n/I18nContext";
-import { Heart, ArrowRight, Sparkles, Palette, Edit3, Eye, Send, Instagram, Facebook, Youtube, Star, Users, ShieldCheck } from "lucide-react";
+import { Heart, ArrowRight, Sparkles, Palette, Edit3, Eye, Send, Instagram, Facebook, Youtube, Star, Users, ShieldCheck, Gift, Music2 } from "lucide-react";
 
 const defaultData = (): MiniSiteData => ({
   themeId: "minimal",
@@ -71,7 +71,7 @@ const Index = () => {
                 <b className="text-foreground">4.9/5</b>
               </div>
               <div className="inline-flex items-center gap-1.5">
-                <Users className="h-4 w-4 text-primary" /><b className="text-foreground">+2.000</b> casais
+                <Users className="h-4 w-4 text-primary" /><b className="text-foreground">+7.000</b> pessoas
               </div>
               <div className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-primary" /> Garantia de 7 dias
@@ -88,10 +88,61 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="relative animate-fadeInUp" style={{ animationDelay: "0.2s" }}>
+          <div className="relative animate-fadeInUp hero-device-scene" style={{ animationDelay: "0.2s" }}>
             <div className="absolute -inset-6 bg-gradient-rose opacity-20 blur-3xl rounded-full pointer-events-none" />
-            <div className="relative max-w-md mx-auto">
-              <MiniSitePreview data={data} compact />
+            <div className="hero-floating-card hero-floating-card-top">
+              <div className="hero-floating-icon">
+                <Gift className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="text-lg font-semibold text-foreground">+7.000</div>
+                <div className="text-sm text-foreground/60">Pessoas já acessaram</div>
+              </div>
+            </div>
+            <div className="hero-side-phone hero-side-phone-left">
+              <div className="hero-phone-notch" />
+              <div className="hero-side-phone-screen hero-side-phone-screen-dark">
+                <div className="rounded-full bg-emerald-400/20 px-2 py-1 text-[10px] font-medium text-emerald-300">WhatsApp</div>
+                <div className="pt-10 text-2xl font-semibold leading-tight text-white/90">
+                  Alguém vai receber um <span className="text-emerald-400">presente</span>
+                </div>
+                <div className="mt-3 text-sm leading-relaxed text-white/55">
+                  Um momento único para celebrar o amor de um jeito inesquecível.
+                </div>
+              </div>
+            </div>
+            <div className="hero-side-phone hero-side-phone-right">
+              <div className="hero-phone-notch" />
+              <div className="hero-side-phone-screen hero-side-phone-screen-blue">
+                <div className="inline-flex items-center gap-2 text-sm font-medium text-white/75">
+                  <Music2 className="h-4 w-4" /> Nossa música
+                </div>
+                <div className="pt-8 text-xl font-semibold leading-tight text-white">
+                  Você poderia ser tudo.
+                </div>
+                <div className="mt-4 text-sm leading-relaxed text-white/70">
+                  Uma mensagem, fotos e música tocando dentro do minisite.
+                </div>
+              </div>
+            </div>
+            <div className="hero-heart hero-heart-1" />
+            <div className="hero-heart hero-heart-2" />
+            <div className="hero-heart hero-heart-3" />
+            <div className="relative hero-main-phone mx-auto">
+              <div className="hero-phone-shell">
+                <div className="hero-phone-status">
+                  <span>18:33</span>
+                  <div className="flex items-center gap-1 text-[10px]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+                    <span className="h-1.5 w-3 rounded-full bg-white/60" />
+                    <span className="h-1.5 w-5 rounded-full bg-white/30" />
+                  </div>
+                </div>
+                <div className="hero-phone-notch hero-phone-notch-main" />
+                <div className="hero-phone-content">
+                  <MiniSitePreview data={data} compact />
+                </div>
+              </div>
             </div>
           </div>
         </div>

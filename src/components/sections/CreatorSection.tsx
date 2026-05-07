@@ -147,7 +147,13 @@ export const CreatorSection = ({ themeId, setThemeId, data, setData, plan, setPl
               <input
                 className={inputBase}
                 value={data.music || ""}
-                onChange={(e) => update("music", e.target.value)}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    music: e.target.value,
+                    hasMusic: plan === "premium" && !!e.target.value.trim(),
+                  })
+                }
                 disabled={plan !== "premium"}
                 placeholder={plan === "premium" ? "Perfect — Ed Sheeran" : t.creator.premiumOnly}
               />
@@ -212,9 +218,9 @@ export const CreatorSection = ({ themeId, setThemeId, data, setData, plan, setPl
               </button>
             </div>
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-rose opacity-20 blur-2xl rounded-3xl pointer-events-none" />
-              <div className="relative">
-                <MiniSitePreview data={{ ...data, themeId, hasMusic: plan === "premium" && !!data.music, hasAnimations: plan === "premium" }} />
+              <div className="absolute -inset-4 bg-gradient-rose opacity-20 blur-2xl rounded-[2rem] pointer-events-none" />
+              <div className="relative max-h-[88vh] overflow-auto rounded-[2rem] border border-border bg-card shadow-soft">
+                <MiniSitePreview data={{ ...data, themeId, hasMusic: plan === "premium" && !!data.music, hasAnimations: plan === "premium" }} fullPage />
               </div>
             </div>
             {/* Theme quick selector */}
@@ -236,8 +242,17 @@ export const CreatorSection = ({ themeId, setThemeId, data, setData, plan, setPl
       </div>
 
       <Dialog open={expanded} onOpenChange={setExpanded}>
-        <DialogContent className="max-w-2xl p-0 bg-transparent border-0 shadow-none">
-          <MiniSitePreview data={{ ...data, themeId, hasMusic: plan === "premium" && !!data.music, hasAnimations: plan === "premium" }} />
+        <DialogContent className="max-w-[96vw] h-[96vh] p-0 bg-transparent border-0 shadow-none">
+          <div className="relative h-full overflow-auto rounded-[2rem]">
+            <button
+              onClick={() => setExpanded(false)}
+              className="absolute right-4 top-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/65 text-white shadow-lg backdrop-blur transition-colors hover:bg-black/80"
+              aria-label="Fechar prévia"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <MiniSitePreview data={{ ...data, themeId, hasMusic: plan === "premium" && !!data.music, hasAnimations: plan === "premium" }} fullPage />
+          </div>
         </DialogContent>
       </Dialog>
     </section>

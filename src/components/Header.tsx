@@ -10,20 +10,37 @@ interface Props {
   onCreate: () => void;
 }
 
+const NAV_LABELS = {
+  "pt-BR": { benefits: "Benefícios", plans: "Planos", support: "Suporte" },
+  en: { benefits: "Features", plans: "Plans", support: "Support" },
+  es: { benefits: "Recursos", plans: "Planes", support: "Soporte" },
+  fr: { benefits: "Avantages", plans: "Plans", support: "Support" },
+  it: { benefits: "Vantaggi", plans: "Piani", support: "Supporto" },
+  ru: { benefits: "Преимущества", plans: "Тарифы", support: "Поддержка" },
+  ja: { benefits: "特徴", plans: "プラン", support: "サポート" },
+  zh: { benefits: "功能", plans: "套餐", support: "支持" },
+  hi: { benefits: "सुविधाएं", plans: "प्लान", support: "सहायता" },
+  ar: { benefits: "المزايا", plans: "الخطط", support: "الدعم" },
+  id: { benefits: "Keunggulan", plans: "Paket", support: "Bantuan" },
+  bn: { benefits: "সুবিধা", plans: "প্ল্যান", support: "সহায়তা" },
+  ur: { benefits: "خصوصیات", plans: "پلان", support: "سپورٹ" },
+} as const;
+
 export const Header = ({ onCreate }: Props) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
   const onLogin = () => navigate(user ? "/account" : "/auth");
+  const miscLabels = NAV_LABELS[lang] || NAV_LABELS.en;
 
   const links = [
     { href: "#how", label: t.nav.how },
     { href: "#themes", label: t.nav.templates },
-    { href: "#benefits", label: "Benefícios" },
-    { href: "#plans", label: "Planos" },
+    { href: "#benefits", label: miscLabels.benefits },
+    { href: "#plans", label: miscLabels.plans },
     { href: "#faq", label: t.nav.faq },
-    { href: "#support", label: "Suporte" },
+    { href: "#support", label: miscLabels.support },
   ];
 
   return (
